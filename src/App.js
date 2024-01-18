@@ -1,10 +1,10 @@
 import './App.css';
-import FirstHeader from './Component/FirstHeader';
+import MainBody from './Component/MainBody';
 
 function App() {
   return (
     <div className="App">
-      <FirstHeader />
+      <MainBody />
     </div>
   );
 }
