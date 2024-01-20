@@ -1,4 +1,5 @@
 import React from "react";
+import InsertModal from "./InserModal";
 
 function SalesActivities() {
   return (
@@ -7,9 +8,10 @@ function SalesActivities() {
         <button className="border col-12 py-3 shadow buttonHover">New</button>
       </div>
       <div className="col-12">
-        <button className="border col-12 py-3 shadow buttonHover">
+        {/* <button className="border col-12 py-3 shadow buttonHover">
           Insert
-        </button>
+        </button> */}
+        <InsertModal />
       </div>
       <div className="col-12">
         <button className="border col-12 py-3 shadow buttonHover">Save</button>

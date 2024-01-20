@@ -1,3 +1,7 @@
 .buttonHover:hover{
 background-color: rgb(205, 205, 209);
 }
+
+.custom-modal {
+    max-width: 1000px; /* Adjust the width as needed */
+  }
