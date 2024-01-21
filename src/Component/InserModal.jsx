@@ -4,7 +4,7 @@ import Select from "react-select";
 import { getallItemsAPI, uploadSalesAPI } from "../services/allAPI";
 import SalesDetails from "./SalesDetails";
 
-function InsertModal() {
+function InsertModal({ customerPayDetails }) {
   const [show, setShow] = useState(false);
   const [selectedCode, setSelectedCode] = useState(null);
   const [selectedName, setSelectedName] = useState(null);
@@ -16,8 +16,8 @@ function InsertModal() {
     item_name: "",
     qty: "",
     rate: "",
-    amount: "",
   });
+  console.log("dfsdfsd", customerPayDetails.id);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -78,7 +78,8 @@ function InsertModal() {
     try {
       const response = await uploadSalesAPI({
         ...salesDetails,
-        id, // Automatically set sr_no to the value of id
+        id,
+        vr_no: customerPayDetails.id, // Automatically set sr_no to the value of id
       });
 
       console.log(response);
@@ -94,7 +95,6 @@ function InsertModal() {
           item_name: "",
           qty: "",
           rate: "",
-          amount: "",
         }));
         handleClose();
       } else {
@@ -111,7 +111,7 @@ function InsertModal() {
     <div>
       <button
         onClick={handleShow}
-        className="border col-12 py-3 shadow buttonHover"
+        className="border  py-2 px-4 shadow buttonHover"
       >
         Insert
       </button>
@@ -190,7 +190,7 @@ function InsertModal() {
                   }
                 />
               </div>
-              <div className="mb-3 col-2">
+              {/* <div className="mb-3 col-2">
                 <label htmlFor="amount" className="form-label">
                   Amount
                 </label>
@@ -204,7 +204,7 @@ function InsertModal() {
                     setsalesDetails({ ...salesDetails, amount: e.target.value })
                   }
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </Modal.Body>

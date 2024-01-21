@@ -1,6 +1,24 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import { SaveCustomerPayDetailsContext } from "../ContextAPI/ContextShare";
+import { getCustomerItemsAPI } from "../services/allAPI";
 
 function SalesDetails() {
+  const { saveCustomerId, setSaveCustomerId } = useContext(
+    SaveCustomerPayDetailsContext
+  );
+  const getCustomerItems = async () => {
+    try {
+      const { data } = await getCustomerItemsAPI();
+      console.log(data);
+      console.log(saveCustomerId);
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    }
+  };
+
+  useEffect(() => {
+    getCustomerItems();
+  }, []);
   return (
     <div className="shadow mx-3">
       <table className="table border" border={1}>
