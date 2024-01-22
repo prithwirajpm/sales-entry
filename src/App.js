@@ -4,11 +4,11 @@ import ContextShare from './ContextAPI/ContextShare';
 
 function App() {
   return (
+    <ContextShare>
     <div className="App">
-      <ContextShare>
       <MainBody />
-      </ContextShare>
     </div>
+    </ContextShare>
   );
 }
 

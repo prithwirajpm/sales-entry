@@ -1,22 +1,38 @@
 import React, { useContext, useEffect, useState } from "react";
-import { SaveCustomerPayDetailsContext } from "../ContextAPI/ContextShare";
+import {
+  customerDetailsPrintContext,
+  SaveCustomerPayDetailsContext,
+  totalAmountContext,
+} from "../ContextAPI/ContextShare";
 import { uploadCustomerPayDetailsAPI } from "../services/allAPI";
 import InsertModal from "./InserModal";
+import PrintTable from "./PrintTable";
 
 function FirstHeader() {
+  // saveCustomer ID
   const { saveCustomerId, setSaveCustomerId } = useContext(
     SaveCustomerPayDetailsContext
   );
+  // customerSales TOtal Amaount
+  const { customerToatalAmount, setcustomerToatalAmount } =
+    useContext(totalAmountContext);
+
+  // printCustomer Details
+  // const { getcustomerdetailsPrint, setgetcustomerdetailsPrint } = useContext(
+  //   customerDetailsPrintContext
+  // );
+
   const [customerPayDetails, setCustomerPayDetails] = useState({
     id: "",
     vr_date: "",
     ac_name: "",
-    ac_amt: "",
+    ac_amt: customerToatalAmount,
     status: "",
   });
 
+  // setgetcustomerdetailsPrint(customerPayDetails);
   const generateNewId = () => {
-    // Generate a unique id based on timestamp and a random number
+    
     return `C${Date.now()}${Math.floor(Math.random() * 1000)}`;
   };
 
@@ -25,7 +41,9 @@ function FirstHeader() {
     setCustomerPayDetails((prevDetails) => ({
       ...prevDetails,
       id: generateNewId(),
-      vr_date: new Date().toISOString().split("T")[0], // Set vr_date to the current date
+      vr_date: new Date().toISOString().split("T")[0],
+      status: "A",
+      
     }));
   };
 
@@ -35,26 +53,27 @@ function FirstHeader() {
     if (!vr_date || !ac_name || !ac_amt) {
       console.log(customerPayDetails);
       alert("Please fill in all the form fields");
+
       return;
     }
 
     try {
       const response = await uploadCustomerPayDetailsAPI({
         ...customerPayDetails,
+        ac_amt: customerToatalAmount,
       });
-
       console.log(response);
-
       if (response.status >= 200 && response.status < 300) {
         alert("Data uploaded successfully");
         setCustomerPayDetails((prevDetails) => ({
           ...prevDetails,
-          id: generateNewId(), // Set a new id after successful upload
-          vr_date: new Date().toISOString().split("T")[0], // Set vr_date to the current date
+          id: generateNewId(), 
+          vr_date: new Date().toISOString().split("T")[0], 
           ac_name: "",
           ac_amt: "",
           status: "",
         }));
+        setcustomerToatalAmount("");
         handleNewButtonClick();
       } else {
         console.error(response);
@@ -66,17 +85,19 @@ function FirstHeader() {
     }
   };
 
-  useEffect(() => {
-    setSaveCustomerId(generateNewId());
-  }, []);
+  // get customerID
+  setSaveCustomerId(customerPayDetails.id);
 
+  useEffect(() => {
+    handleNewButtonClick();
+  }, []);
   return (
     <div>
       <div>
         <div className="border m-3 py-3 shadow">
           <div>
             {" "}
-            <h1 className="text-center text-danger">Header</h1>
+            <h1 className="text-center text-danger">HEADER</h1>
           </div>
           <div className="d-flex justify-content-end">
             <div>
@@ -94,16 +115,19 @@ function FirstHeader() {
               <InsertModal customerPayDetails={customerPayDetails} />
             </div>
             <div>
+              {/* <button
+                className="border py-2 px-4 shadow buttonHover"
+                onClick={() => window.print()}
+              > */}
+              <PrintTable customerPayDetails={customerPayDetails} />
+              {/* </button> */}
+            </div>
+            <div>
               <button
                 className="border py-2 px-4 shadow buttonHover"
                 onClick={() => saveCustomerDetails()}
               >
                 Save
-              </button>
-            </div>
-            <div>
-              <button className="border py-2 px-4 shadow buttonHover">
-                Print
               </button>
             </div>
           </div>
@@ -120,6 +144,7 @@ function FirstHeader() {
                     className="form-control w-100"
                     id="inputtext"
                     value={customerPayDetails.id}
+                    readOnly
                   />
                 </div>
               </div>
@@ -141,6 +166,7 @@ function FirstHeader() {
                         vr_date: e.target.value,
                       })
                     }
+                    readOnly
                   />
                 </div>
               </div>
@@ -162,6 +188,7 @@ function FirstHeader() {
                         status: e.target.value,
                       })
                     }
+                    readOnly
                   />
                 </div>
               </div>
@@ -197,7 +224,7 @@ function FirstHeader() {
                     type="text"
                     className="form-control"
                     id="inputtext"
-                    value={customerPayDetails.ac_amt}
+                    value={customerToatalAmount}
                     onChange={(e) =>
                       setCustomerPayDetails({
                         ...customerPayDetails,

@@ -20,3 +20,9 @@ export const uploadCustomerPayDetailsAPI = async (reqBody)=>{
 export const getCustomerItemsAPI = async()=>{
     return await commomAPI("GET",`${BASE_URL}/detail`,"")
 }
+
+
+// delete items
+export const deletesalesItemsAPI = async(id)=>{
+    return await commomAPI("DELETE",`${BASE_URL}/detail/${id}`,{})
+}
